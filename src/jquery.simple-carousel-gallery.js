@@ -6,7 +6,10 @@
        DEFAULTS;
 
    DEFAULTS = {
-      templateSelector: '#SCQTemplate'
+      templateSelector: '#SCQTemplate',
+      mediaFadeInSpeed: 200,
+      mediaFadeOutSpeed: 200,
+      carouselAnimationSpeed: 400
    };
 
    // The actual plugin constructor
@@ -77,15 +80,51 @@
 
       _renderCurrent: function() {
          var item = this.items[this._currentIndex],
+             media = this.element.find('.media'),
+             mediaFadeInSpeed = this.settings.mediaFadeInSpeed,
              $item = this._createMarkupFor(item);
 
-         this.element.find('.media').empty().append($item);
+         function showItem() {
+            $item.hide();
+            media.empty().append($item);
+            $item.fadeIn(mediaFadeInSpeed);
+         }
+
+         if (this._currentMediaItem) {
+            this._currentMediaItem.fadeOut(this.settings.mediaFadeOutSpeed, showItem);
+         } else {
+            showItem();
+         }
+         this._currentMediaItem = $item;
+
          this.element.find('.caption').empty().html(item.caption);
+      },
+
+      _highlightCurrentThumbnail: function() {
+         this.element.find('.carousel li.carouselItem')
+            .removeClass('active')
+            .eq(this._currentIndex).addClass('active');
+
+         this._scrollToSelectedThumbnail();
+      },
+
+      _scrollToSelectedThumbnail: function() {
+         var carousel = this.element.find('.carousel'),
+             firstThumb = carousel.find('li.carouselItem:first-child'),
+             thumb = carousel.find('li.carouselItem.active'),
+             carouselWidth = carousel.width(),
+             thumbWidth = thumb.outerWidth(),
+             left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
+
+         firstThumb.animate({
+            marginLeft: left + 'px'
+         }, this.settings.carouselAnimationSpeed);
       },
 
       goTo: function(i) {
          this._currentIndex = i;
          this._renderCurrent();
+         this._highlightCurrentThumbnail();
       }
    });
 
