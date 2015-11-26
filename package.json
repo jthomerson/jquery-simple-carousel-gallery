@@ -1,0 +1,33 @@
+{
+  "name": "jquery-simple-carousel-gallery",
+  "version": "0.1.0",
+  "description": "A very simple image / video gallery with a carousel of thumbnails.",
+  "keywords": [
+    "jquery-plugin",
+    "jquery",
+    "image gallery",
+    "media gallery",
+    "video gallery",
+    "plugins"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jthomerson/jquery-simple-carousel-gallery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jthomerson/jquery-simple-carousel-gallery/issues"
+  },
+  "author": "Jeremy Thomerson",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  }
+}

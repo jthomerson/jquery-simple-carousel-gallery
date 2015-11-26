@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>jQuery Simple Carousel Gallery</title>
+      <link rel="stylesheet" href="demo.css" media="all" />
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+      <script src="../src/jquery.simple-carousel-gallery.js"></script>
+   </head>
+   <body>
+      <h1>Sample Gallery Page</h1>
+      <div id="gallery"></div>
+
+      <div id="SCQTemplate">
+         <h2>A Gallery</h2>
+         <div class="media">
+            <div class="video">
+               <video controls="true">
+                  <source type="video/mp4" src="">
+               </video>
+            </div>
+         </div>
+         <p class="caption"></p>
+         <ul class="carousel">
+            <li class="carouselItem">
+            </li>
+         </ul>
+      </div>
+
+      <script>
+         $(function() {
+            var items, opts;
+
+            items = [
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=Item%200&w=100&h=100',
+                  src: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Item%200&w=900&h=400',
+                  type: 'image',
+                  caption: 'This is sample 0.'
+               },
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=MOVIE%20Big%20Buck%20Bunny&w=100&h=100',
+                  src: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+                  type: 'video',
+                  caption: 'This is a sample movie (index 1).'
+               },
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=Item%202&w=100&h=100',
+                  src: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Item%202&w=900&h=400',
+                  type: 'image',
+                  caption: 'This is sample 2.'
+               },
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=Item%203&w=100&h=100',
+                  src: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Item%203&w=900&h=400',
+                  type: 'image',
+                  caption: 'This is sample 3.'
+               },
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=Item%204&w=100&h=100',
+                  src: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Item%204&w=900&h=400',
+                  type: 'image',
+                  caption: 'This is sample 4.'
+               },
+               {
+                  thumb: 'https://placeholdit.imgix.net/~text?txtsize=12&txt=Item%205&w=100&h=100',
+                  src: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=Item%205&w=900&h=400',
+                  type: 'image',
+                  caption: 'This is sample 5.'
+               }
+            ];
+
+            opts = {
+            };
+
+            $("#gallery").SimpleCarouselGallery(items, opts);
+         });
+      </script>
+   </body>
+</html>
