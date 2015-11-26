@@ -7,6 +7,7 @@
 
    DEFAULTS = {
       templateSelector: '#SCQTemplate',
+      allowPrevNextWrapAround: false,
       mediaFadeInSpeed: 200,
       mediaFadeOutSpeed: 200,
       carouselAnimationSpeed: 400
@@ -26,7 +27,7 @@
    // Avoid Plugin.prototype conflicts
    $.extend(Plugin.prototype, {
 
-      _currentIndex: 0,
+      _currentIndex: -1,
 
       init: function() {
          var self = this,
@@ -42,8 +43,32 @@
             self.goTo(i);
          });
 
-
          this.goTo(0);
+
+         this.element.find('.goToPrevious').click(this.previous.bind(this));
+         this.element.find('.goToNext').click(this.next.bind(this));
+      },
+
+      previous: function(evt) {
+         var previous = (this._currentIndex - 1);
+
+         if (previous < 0) {
+            previous = (this.settings.allowPrevNextWrapAround ? (this.items.length - 1) : 0);
+         }
+
+         evt.preventDefault();
+         this.goTo(previous);
+      },
+
+      next: function(evt) {
+         var next = (this._currentIndex + 1);
+
+         if (next >= this.items.length) {
+            next = (this.settings.allowPrevNextWrapAround ? 0 : (this.items.length - 1));
+         }
+
+         evt.preventDefault();
+         this.goTo(next);
       },
 
       _renderCarouselInto: function(gallery) {
@@ -121,8 +146,31 @@
          }, this.settings.carouselAnimationSpeed);
       },
 
+      _updateButtons: function() {
+         if (this.settings.allowPrevNextWrapAround) {
+            return;
+         }
+
+         if (this._currentIndex === 0) {
+            this.element.find('.goToPrevious').addClass('disabled');
+         } else {
+            this.element.find('.goToPrevious').removeClass('disabled');
+         }
+
+         if (this._currentIndex === (this.items.length - 1)) {
+            this.element.find('.goToNext').addClass('disabled');
+         } else {
+            this.element.find('.goToNext').removeClass('disabled');
+         }
+      },
+
       goTo: function(i) {
+         if (i === this._currentIndex) {
+            return;
+         }
+
          this._currentIndex = i;
+         this._updateButtons();
          this._renderCurrent();
          this._highlightCurrentThumbnail();
       }

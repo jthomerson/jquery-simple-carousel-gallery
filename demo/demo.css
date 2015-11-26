@@ -7,7 +7,7 @@
    margin: 1em;
 }
 
-.media {
+.mediaContainer {
    height: 60vh;
 }
 .media img {
@@ -20,6 +20,10 @@ ul.carousel {
    width: 100%;
    overflow: hidden;
    white-space: nowrap;
+}
+
+.goToPrevious.disabled, .goToNext.disabled {
+   display: none;
 }
 
 ul.carousel li {
