@@ -47,6 +47,8 @@
 
          this.element.find('.goToPrevious').click(this.previous.bind(this));
          this.element.find('.goToNext').click(this.next.bind(this));
+
+         $(window).resize(this._scrollToSelectedThumbnail.bind(this));
       },
 
       previous: function(evt) {
