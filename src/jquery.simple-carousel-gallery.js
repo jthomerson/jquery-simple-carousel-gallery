@@ -2,11 +2,11 @@
 
    'use strict';
 
-   var SCQ = 'SimpleCarouselGallery',
+   var SCG = 'SimpleCarouselGallery',
        DEFAULTS;
 
    DEFAULTS = {
-      templateSelector: '#SCQTemplate',
+      templateSelector: '#SCGTemplate',
       allowPrevNextWrapAround: false,
       mediaFadeInSpeed: 200,
       mediaFadeOutSpeed: 200,
@@ -20,7 +20,7 @@
       this.settings = $.extend({}, DEFAULTS, options);
       this.template = $(this.settings.templateSelector);
       this._defaults = DEFAULTS;
-      this._name = SCQ;
+      this._name = SCG;
       this.init();
    }
 
@@ -180,10 +180,10 @@
 
    // A really lightweight plugin wrapper around the constructor,
    // preventing against multiple instantiations
-   $.fn[ SCQ ] = function(items, options) {
+   $.fn[ SCG ] = function(items, options) {
       return this.each(function() {
-         if (!$.data(this, 'plugin_' + SCQ)) {
-            $.data(this, 'plugin_' + SCQ, new Plugin(this, items, options));
+         if (!$.data(this, 'plugin_' + SCG)) {
+            $.data(this, 'plugin_' + SCG, new Plugin(this, items, options));
          }
       });
    };
