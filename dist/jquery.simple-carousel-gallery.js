@@ -14,7 +14,11 @@
        DEFAULTS;
 
    DEFAULTS = {
-      templateSelector: '#SCQTemplate'
+      templateSelector: '#SCQTemplate',
+      allowPrevNextWrapAround: false,
+      mediaFadeInSpeed: 200,
+      mediaFadeOutSpeed: 200,
+      carouselAnimationSpeed: 400
    };
 
    // The actual plugin constructor
@@ -31,7 +35,7 @@
    // Avoid Plugin.prototype conflicts
    $.extend(Plugin.prototype, {
 
-      _currentIndex: 0,
+      _currentIndex: -1,
 
       init: function() {
          var self = this,
@@ -47,8 +51,34 @@
             self.goTo(i);
          });
 
-
          this.goTo(0);
+
+         this.element.find('.goToPrevious').click(this.previous.bind(this));
+         this.element.find('.goToNext').click(this.next.bind(this));
+
+         $(window).resize(this._scrollToSelectedThumbnail.bind(this));
+      },
+
+      previous: function(evt) {
+         var previous = (this._currentIndex - 1);
+
+         if (previous < 0) {
+            previous = (this.settings.allowPrevNextWrapAround ? (this.items.length - 1) : 0);
+         }
+
+         evt.preventDefault();
+         this.goTo(previous);
+      },
+
+      next: function(evt) {
+         var next = (this._currentIndex + 1);
+
+         if (next >= this.items.length) {
+            next = (this.settings.allowPrevNextWrapAround ? 0 : (this.items.length - 1));
+         }
+
+         evt.preventDefault();
+         this.goTo(next);
       },
 
       _renderCarouselInto: function(gallery) {
@@ -85,15 +115,75 @@
 
       _renderCurrent: function() {
          var item = this.items[this._currentIndex],
+             media = this.element.find('.media'),
+             mediaFadeInSpeed = this.settings.mediaFadeInSpeed,
              $item = this._createMarkupFor(item);
 
-         this.element.find('.media').empty().append($item);
+         function showItem() {
+            $item.hide();
+            media.empty().append($item);
+            $item.fadeIn(mediaFadeInSpeed);
+         }
+
+         if (this._currentMediaItem) {
+            this._currentMediaItem.fadeOut(this.settings.mediaFadeOutSpeed, showItem);
+         } else {
+            showItem();
+         }
+         this._currentMediaItem = $item;
+
          this.element.find('.caption').empty().html(item.caption);
       },
 
+      _highlightCurrentThumbnail: function() {
+         this.element.find('.carousel li.carouselItem')
+            .removeClass('active')
+            .eq(this._currentIndex).addClass('active');
+
+         this._scrollToSelectedThumbnail();
+      },
+
+      _scrollToSelectedThumbnail: function() {
+         var carousel = this.element.find('.carousel'),
+             firstThumb = carousel.find('li.carouselItem:first-child'),
+             thumb = carousel.find('li.carouselItem.active'),
+             carouselWidth = carousel.width(),
+             thumbWidth = thumb.outerWidth(),
+             left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
+
+         console.log('carousel %s, thumb %s, left %s', carouselWidth, thumbWidth, left);
+         firstThumb.animate({
+            marginLeft: left + 'px'
+         }, this.settings.carouselAnimationSpeed);
+      },
+
+      _updateButtons: function() {
+         if (this.settings.allowPrevNextWrapAround) {
+            return;
+         }
+
+         if (this._currentIndex === 0) {
+            this.element.find('.goToPrevious').addClass('disabled');
+         } else {
+            this.element.find('.goToPrevious').removeClass('disabled');
+         }
+
+         if (this._currentIndex === (this.items.length - 1)) {
+            this.element.find('.goToNext').addClass('disabled');
+         } else {
+            this.element.find('.goToNext').removeClass('disabled');
+         }
+      },
+
       goTo: function(i) {
+         if (i === this._currentIndex) {
+            return;
+         }
+
          this._currentIndex = i;
+         this._updateButtons();
          this._renderCurrent();
+         this._highlightCurrentThumbnail();
       }
    });
 
