@@ -15,6 +15,7 @@
 
    DEFAULTS = {
       templateSelector: '#SCGTemplate',
+      preload: true,
       allowPrevNextWrapAround: false,
       mediaFadeInSpeed: 200,
       mediaFadeOutSpeed: 200,
@@ -59,26 +60,34 @@
          $(window).resize(this._scrollToSelectedThumbnail.bind(this));
       },
 
-      previous: function(evt) {
+      _getPrevInd: function() {
          var previous = (this._currentIndex - 1);
 
          if (previous < 0) {
             previous = (this.settings.allowPrevNextWrapAround ? (this.items.length - 1) : 0);
          }
 
-         evt.preventDefault();
-         this.goTo(previous);
+         return previous;
       },
 
-      next: function(evt) {
+      previous: function(evt) {
+         evt.preventDefault();
+         this.goTo(this._getPrevInd());
+      },
+
+      _getNextInd: function() {
          var next = (this._currentIndex + 1);
 
          if (next >= this.items.length) {
             next = (this.settings.allowPrevNextWrapAround ? 0 : (this.items.length - 1));
          }
 
+         return next;
+      },
+
+      next: function(evt) {
          evt.preventDefault();
-         this.goTo(next);
+         this.goTo(this._getNextInd());
       },
 
       _renderCarouselInto: function(gallery) {
@@ -174,6 +183,29 @@
          }
       },
 
+      _preloadSurrounding: function() {
+         if (!this.settings.preload) {
+            return;
+         }
+
+         var next = this._getNextInd(),
+             prev = this._getPrevInd();
+
+         $.each([ prev, next ], function(i, imgInd) {
+            var item = this.items[imgInd];
+
+            if (item.__isLoaded || item.type === 'video' || imgInd === this._currentIndex) {
+               return;
+            }
+
+            $('<img />')
+               .attr('src', item.src)
+               .load(function() {
+                  $(this).remove();
+               });
+         }.bind(this));
+      },
+
       goTo: function(i) {
          if (i === this._currentIndex) {
             return;
@@ -183,6 +215,7 @@
          this._updateButtons();
          this._renderCurrent();
          this._highlightCurrentThumbnail();
+         this._preloadSurrounding();
       }
    });
 
