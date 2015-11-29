@@ -155,14 +155,17 @@
       _scrollToSelectedThumbnail: function() {
          var carousel = this.element.find('.carousel'),
              firstThumb = carousel.find('.carouselItem:first-child'),
-             thumb = carousel.find('.carouselItem.active'),
-             carouselWidth = carousel.width(),
-             thumbWidth = thumb.outerWidth(),
-             left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
+             activeThumb = carousel.find('.carouselItem.active');
 
-         firstThumb.animate({
-            marginLeft: left + 'px'
-         }, this.settings.carouselAnimationSpeed);
+         firstThumb.find('img').load(function() {
+            var carouselWidth = carousel.width(),
+                thumbWidth = activeThumb.outerWidth(),
+                left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
+
+            firstThumb.animate({
+               marginLeft: left + 'px'
+            }, this.settings.carouselAnimationSpeed);
+         }.bind(this));
       },
 
       _updateButtons: function() {
