@@ -44,8 +44,12 @@
              gallery = this.template.clone();
 
          gallery.find('.media').empty();
+
          this._renderCarouselInto(gallery);
          this.element.empty().append(gallery.html());
+
+         $(window).resize(this._scrollToSelectedThumbnail.bind(this));
+         this.element.find('.carouselItem img').eq(0).load(this._scrollToSelectedThumbnail.bind(this));
 
          this.element.on('click', '.carouselItem', function(evt) {
             var i = $(evt.target).closest('.carouselItem').data('index');
@@ -57,8 +61,6 @@
 
          this.element.find('.goToPrevious').click(this.previous.bind(this));
          this.element.find('.goToNext').click(this.next.bind(this));
-
-         $(window).resize(this._scrollToSelectedThumbnail.bind(this));
       },
 
       _getPrevInd: function() {
@@ -165,17 +167,14 @@
       _scrollToSelectedThumbnail: function() {
          var carousel = this.element.find('.carousel'),
              firstThumb = carousel.find('.carouselItem:first-child'),
-             activeThumb = carousel.find('.carouselItem.active');
-
-         firstThumb.find('img').load(function() {
-            var carouselWidth = carousel.width(),
-                thumbWidth = activeThumb.outerWidth(),
-                left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
+             activeThumb = carousel.find('.carouselItem.active'),
+             carouselWidth = carousel.width(),
+             thumbWidth = activeThumb.outerWidth(),
+             left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
 
             firstThumb.animate({
                marginLeft: left + 'px'
             }, this.settings.carouselAnimationSpeed);
-         }.bind(this));
       },
 
       _updateButtons: function() {
