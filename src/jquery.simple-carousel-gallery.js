@@ -11,7 +11,8 @@
       allowPrevNextWrapAround: false,
       mediaFadeInSpeed: 200,
       mediaFadeOutSpeed: 200,
-      carouselAnimationSpeed: 400
+      carouselAnimationSpeed: 400,
+      autoPlay: true
    };
 
    // The actual plugin constructor
@@ -115,7 +116,8 @@
       },
 
       _renderCurrent: function() {
-         var item = this.items[this._currentIndex],
+         var self = this,
+             item = this.items[this._currentIndex],
              media = this.element.find('.media'),
              mediaFadeInSpeed = this.settings.mediaFadeInSpeed,
              $item = this._createMarkupFor(item);
@@ -123,7 +125,14 @@
          function showItem() {
             $item.hide();
             media.empty().append($item);
-            $item.fadeIn(mediaFadeInSpeed);
+            $item.fadeIn(mediaFadeInSpeed, function() {
+               if (item.type === 'video' && self.settings.autoPlay) {
+                  var vid = $item.andSelf().filter('video').get(0);
+                  if (vid) {
+                     vid.play();
+                  }
+               }
+            });
          }
 
          if (this._currentMediaItem) {
@@ -134,6 +143,7 @@
          this._currentMediaItem = $item;
 
          this.element.find('.caption').empty().html(item.caption);
+         this.element.trigger('galleryItemShown', item);
       },
 
       _highlightCurrentThumbnail: function() {
