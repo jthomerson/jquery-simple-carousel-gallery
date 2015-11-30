@@ -1,7 +1,7 @@
 /*
- *  jquery-simple-carousel-gallery - v0.1.0
+ *  jquery-simple-carousel-gallery - v0.9.0
  *  A very simple image / video gallery with a carousel of thumbnails.
- *  
+ *  https://github.com/jthomerson/jquery-simple-carousel-gallery
  *
  *  Made by Jeremy Thomerson
  *  Under Apache-2.0 License

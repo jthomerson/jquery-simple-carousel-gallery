@@ -17,6 +17,7 @@
   "bugs": {
     "url": "https://github.com/jthomerson/jquery-simple-carousel-gallery/issues"
   },
+  "homepage": "https://github.com/jthomerson/jquery-simple-carousel-gallery",
   "author": "Jeremy Thomerson",
   "license": "Apache-2.0",
   "devDependencies": {
