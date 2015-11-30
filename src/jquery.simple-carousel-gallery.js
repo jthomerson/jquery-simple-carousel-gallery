@@ -94,7 +94,7 @@
                 img = $('<img />'),
                 link = $('<a />');
 
-            $item.attr('data-index', i);
+            $item.attr('data-index', i).addClass(item.type || 'image');
             link.attr('href', '#');
             img.attr('src', item.thumb);
 
