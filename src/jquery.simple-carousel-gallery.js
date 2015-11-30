@@ -161,7 +161,8 @@
              firstThumb = carousel.find('.carouselItem:first-child'),
              activeThumb = carousel.find('.carouselItem.active'),
              carouselWidth = carousel.width(),
-             thumbWidth = activeThumb.outerWidth(),
+             margin = (activeThumb.outerWidth(true) - activeThumb.outerWidth()),
+             thumbWidth = (activeThumb.outerWidth() + (margin / 2)),
              left = ((carouselWidth / 2) - (thumbWidth / 2) - (thumbWidth * this._currentIndex));
 
             firstThumb.animate({
