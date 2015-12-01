@@ -12,6 +12,7 @@
       mediaFadeInSpeed: 200,
       mediaFadeOutSpeed: 200,
       carouselAnimationSpeed: 400,
+      keyboardNavigation: true,
       autoPlay: true
    };
 
@@ -51,9 +52,23 @@
 
          this.goTo(0);
 
+         this._registerKeyboardListeners();
          this.element.find('.goToPrevious').click(this.previous.bind(this));
          this.element.find('.goToNext').click(this.next.bind(this));
       },
+
+      _registerKeyboardListeners: function() {
+         if (this.settings.keyboardNavigation) {
+            $(document).on('keyup', function(evt) {
+               if (evt.keyCode === 37) {
+                  this.previous();
+               } else if (evt.keyCode === 39) {
+                  this.next();
+               }
+            }.bind(this));
+         }
+      },
+
 
       _getPrevInd: function() {
          var previous = (this._currentIndex - 1);
@@ -66,7 +81,7 @@
       },
 
       previous: function(evt) {
-         evt.preventDefault();
+         evt && evt.preventDefault();
          this.goTo(this._getPrevInd());
       },
 
@@ -81,7 +96,7 @@
       },
 
       next: function(evt) {
-         evt.preventDefault();
+         evt && evt.preventDefault();
          this.goTo(this._getNextInd());
       },
 
