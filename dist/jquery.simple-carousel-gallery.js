@@ -50,7 +50,7 @@
          this.element.empty().append(gallery.html());
 
          $(window).resize(this._scrollToSelectedThumbnail.bind(this));
-         this.element.find('.carouselItem img').eq(0).load(this._scrollToSelectedThumbnail.bind(this));
+         this.element.find('.carouselItem img').eq(0).on("load", this._scrollToSelectedThumbnail.bind(this));
 
          this.element.on('click', '.carouselItem', function(evt) {
             var i = $(evt.target).closest('.carouselItem').data('index');
@@ -228,7 +228,7 @@
 
             $('<img />')
                .attr('src', item.src)
-               .load(function() {
+               .on("load", function() {
                   $(this).remove();
                });
          }.bind(this));
